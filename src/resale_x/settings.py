@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'localflavor',
+    'crispy_forms',
+    'crispy_bootstrap4',
     'main',
     'users',
 ]
@@ -123,6 +125,9 @@ STATIC_URL = 'static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# Django Crispy Form Settings
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # Default primary key field type

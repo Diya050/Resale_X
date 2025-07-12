@@ -1,8 +1,23 @@
 {% extends 'base/base.html' %}
 
+{% load static %}
+{% load crispy_forms_tags %}
+
 {% block 'body' %}
-<h1>Login View :)</h1>
+<div class="text-center">
+    <main class="form-signin">
+        <form action="" method="post">
+            <img class="mb-4" src="{% static 'images/logo.png' %}" alt="" width="72" height="72">
+            {% csrf_token %}
+            {{ login_form|crispy }}
+            <button class="w-100 btn btn-lg btn-danger" type="submit">Sign In</button>
+            <p class="mt-5 mb-3 text-muted">Welcome to ResaleX!</p>
+        </form>
+    </main>
+</div> 
 {% endblock %}
 
 {% block 'footer' %}
 {% endblock %}
+
+
