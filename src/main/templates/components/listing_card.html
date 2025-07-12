@@ -16,10 +16,10 @@
         <p class="card-text">{{listing.description}}</p>
         <div class="d-flex justify-content-between align-items-center">
             <div class="btn-group">
-                {% comment %} <a href="{% url 'listing' id=listing.id %}" type="button" {% endcomment %}
+                <a href="{% url 'listing' id=listing.id %}" type="button"
                     class="btn btn-sm btn-outline-secondary">View</a>
                 {% if listing.seller.user == request.user %}
-                {% comment %} <a href="{% url 'edit' id=listing.id %}" type="button" class="btn btn-sm btn-outline-secondary">Edit</a> {% endcomment %}
+                <a href="{% url 'edit' id=listing.id %}" type="button" class="btn btn-sm btn-outline-secondary">Edit</a>
                 {% endif %}
             </div>
             <small class="text-muted">{{listing.updated_at}}</small>

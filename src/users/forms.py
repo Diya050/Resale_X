@@ -1,7 +1,6 @@
 from dataclasses import field
 from django import forms
 from django.contrib.auth.models import User
-from localflavor.us.forms import USZipCodeField
 
 from .models import Location, Profile
 from .widgets import CustomPictureImageFieldWidget
@@ -27,7 +26,7 @@ class ProfileForm(forms.ModelForm):
 class LocationForm(forms.ModelForm):
 
     address_1 = forms.CharField(required=True)
-    zip_code = USZipCodeField(required=True)
+    zip_code = forms.CharField(required=True)
 
     class Meta:
         model = Location

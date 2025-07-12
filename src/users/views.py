@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
@@ -8,6 +9,7 @@ from django.views import View
 
 from main.models import Listing, LikedListing
 from .forms import UserForm, ProfileForm, LocationForm
+
 
 def login_view(request):
     if request.method == 'POST':
