@@ -4,11 +4,61 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 from .models import LikedListing, Listing
 from .forms import ListingForm
 from users.forms import LocationForm
 from .filters import ListingFilter
+import joblib
+import xgboost as xgb
+import numpy as np
+import json
+import os
+from django.conf import settings
+
+
+# Load preprocessing artifacts and model
+model_dir = os.path.join(settings.BASE_DIR, 'main', 'ml')
+xgb_model = xgb.Booster()
+xgb_model.load_model(os.path.join(model_dir, "best_xgb.model"))
+scaler = joblib.load(os.path.join(model_dir, "scaler.pkl"))
+model_te_mapping = joblib.load(os.path.join(model_dir, "model_te_mapping.pkl"))
+brand_te_mapping = joblib.load(os.path.join(model_dir, "brand_te_mapping.pkl"))
+onehot_columns = joblib.load(os.path.join(model_dir, "onehot_columns.pkl"))
+global_mean = joblib.load(os.path.join(model_dir, "global_mean.pkl"))
+
+@csrf_exempt
+def predict_price(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            brand = data['brand']
+            model = data['model']
+            year = int(data['year'])
+            mileage = float(data['mileage'])
+
+            # Preprocess inputs
+            brand_encoded = brand_te_mapping.get(brand, global_mean)
+            model_encoded = model_te_mapping.get(model, global_mean)
+            age = 2025 - year  # Adjust year to age
+            input_data = [[brand_encoded, model_encoded, age, mileage]]
+
+            # Scale
+            input_scaled = scaler.transform(input_data)
+
+            # Create DMatrix for XGBoost
+            dmatrix = xgb.DMatrix(input_scaled, feature_names=onehot_columns)
+
+            # Predict
+            price = xgb_model.predict(dmatrix)[0]
+            price = round(price, 2)
+
+            return JsonResponse({"success": True, "price": price})
+        except Exception as e:
+            print("Prediction Error:", e)
+            return JsonResponse({"success": False, "error": str(e)})
+    return JsonResponse({"success": False, "error": "Invalid request"})
 
 
 def main_view(request):

@@ -2,6 +2,8 @@ from django.conf import settings
 from django.urls import path
 
 from .views import main_view, home_view, list_view, listing_view, edit_view, like_listing_view, inquire_listing_using_email
+from .views import predict_price
+
 
 urlpatterns = [
     path('', main_view, name='main'),
@@ -12,4 +14,7 @@ urlpatterns = [
     path('listing/<str:id>/like/', like_listing_view, name='like_listing'),
     path('listing/<str:id>/inquire/',
          inquire_listing_using_email, name='inquire_listing'),
+]
+urlpatterns += [
+    path('predict-price/', predict_price, name='predict_price'),
 ]
