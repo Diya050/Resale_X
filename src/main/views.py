@@ -34,26 +34,35 @@ def list_view(request):
     if request.method == 'POST':
         try:
             listing_form = ListingForm(request.POST, request.FILES)
-            location_form = LocationForm(request.POST, )
+            location_form = LocationForm(request.POST)
+            
             if listing_form.is_valid() and location_form.is_valid():
                 listing = listing_form.save(commit=False)
                 listing_location = location_form.save()
                 listing.seller = request.user.profile
                 listing.location = listing_location
                 listing.save()
-                messages.info(
+                
+                messages.success(
                     request, f'{listing.model} Listing Posted Successfully!')
                 return redirect('home')
             else:
-                raise Exception()
+                print("Form errors:", listing_form.errors, location_form.errors)
+                messages.error(
+                    request, 'Invalid form data. Please check and try again.')
         except Exception as e:
-            print(e)
+            print("Error while posting listing:", e)
             messages.error(
-                request, 'An error occured while posting the listing.')
-    elif request.method == 'GET':
+                request, 'An unexpected error occurred while posting the listing.')
+    else:  # GET request
         listing_form = ListingForm()
         location_form = LocationForm()
-    return render(request, 'views/list.html', {'listing_form': listing_form, 'location_form': location_form, })
+        
+    return render(request, 'views/list.html', {
+        'listing_form': listing_form,
+        'location_form': location_form,
+    })
+
 
 
 @login_required

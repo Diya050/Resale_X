@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
+    <meta name="description" content="{% url 'home' %}">
     <meta name="author" content="Hussain Mustafa, Preneure">
 
     {% block 'title' %}
@@ -63,8 +63,8 @@
     <div class="container">
         <p class="float-end mb-1">Powered by <a href="https://www.djangoproject.com/">Django</a></p>
         </p>
-        <p class="mb-1">AutoMax - Best Place To Buy & Sell Cars</p>
-        <p class="mb-0">© Copyright {% now 'Y' %} <a href="">AutoMax</a></p>
+        <p class="mb-1">ResaleX - Best Place To Buy & Sell Cars</p>
+        <p class="mb-0">Welcome to <a href="{% url 'home' %}">ResaleX</a></p>
     </div>
 </footer>
 {% endblock %}
