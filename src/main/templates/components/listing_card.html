@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="card shadow-sm">
     <img class="bd-placeholder-img card-img-top" width="100%" src="{{listing.image.url}}" role="img"
         aria-label="Placeholder: Thumbnail" focusable="false">
@@ -5,8 +7,13 @@
         <h4 class="card-text">{{listing.model}}</h4>
         <div class="row justify-content-start align-items-center">
             <div class="col-1">
-                <img src="{{listing.seller.photo.url}}" class="rounded-circle" height="30" width="30"
-                    style="object-fit: cover;">
+                {% if listing.seller.photo %}
+                    <img src="{{ listing.seller.photo.url }}" class="rounded-circle" height="30" width="30"
+                        style="object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'images/logo.png' %}" class="rounded-circle" height="30" width="30"
+                        style="object-fit: cover;">
+                {% endif %}
             </div>
             <div class="col-4">
                 <p class="card-text">{{listing.seller.user.username}}</p>
