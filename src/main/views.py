@@ -185,9 +185,9 @@ def inquire_listing_using_email(request, id):
         emailSubject = f'{request.user.username} is interested in {listing.model}'
         emailMessage = (
             f'Hi {listing.seller.user.username},\n\n'
-            f'{request.user.username} is interested in your {listing.model} listing on AutoMax.\n'
-            f'Please log in to AutoMax to view details.\n\n'
-            'Regards,\nAutoMax Team'
+            f'{request.user.username} is interested in your {listing.model} listing on ResaleX.\n'
+            f'Please log in to ResaleX to view details.\n\n'
+            'Regards,\nResaleX Team'
         )
         send_mail(
             emailSubject,
