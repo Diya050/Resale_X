@@ -183,15 +183,23 @@ def inquire_listing_using_email(request, id):
     listing = get_object_or_404(Listing, id=id)
     try:
         emailSubject = f'{request.user.username} is interested in {listing.model}'
-        emailMessage = f'Hi {listing.seller.user.username}, {request.user.username} is interested in your {listing.model} listing on AutoMax'
-        send_mail(emailSubject, emailMessage, 'noreply@automax.com',
-                  [listing.seller.user.email, ], fail_silently=True)
-        return JsonResponse({
-            "success": True,
-        })
+        emailMessage = (
+            f'Hi {listing.seller.user.username},\n\n'
+            f'{request.user.username} is interested in your {listing.model} listing on AutoMax.\n'
+            f'Please log in to AutoMax to view details.\n\n'
+            'Regards,\nAutoMax Team'
+        )
+        send_mail(
+            emailSubject,
+            emailMessage,
+            settings.DEFAULT_FROM_EMAIL,
+            [listing.seller.user.email],
+            fail_silently=False  # Change to True only in production
+        )
+        return JsonResponse({"success": True})
     except Exception as e:
-        print(e)
+        print(f"Email send error: {e}")  # Also log it for debugging
         return JsonResponse({
             "success": False,
-            "info": e,
+            "info": str(e),  # Convert error to string
         })
