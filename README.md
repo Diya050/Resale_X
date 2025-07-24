@@ -25,7 +25,7 @@ ResaleX is a full-stack web application for buying and selling pre-owned cars in
 - **Backend:** Django, Python  
 - **Frontend:** HTML, CSS, Bootstrap, JavaScript (AJAX)  
 - **Machine Learning:** XGBoost, scikit-learn, pandas, NumPy  
-- **Database:** PostgreSQL (or SQLite for dev)  
+- **Database:** PostgreSQL (SQLite for dev)  
 - **Other Tools:** Joblib (model serialization), jQuery, Django Crispy Forms  
 
 ---
