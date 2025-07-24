@@ -5,7 +5,6 @@
 
 {% block 'body' %}
 
-
 <div class="container-fluid text-center py-5">
     <div class="container px-4 py-5" id="hanging-icons">
         <div class="row g-4">
@@ -35,97 +34,110 @@
 
 <!-- Price Prediction Modal -->
 <div id="predictModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1050;">
-  <div class="modal-content" style="background:white; margin:10% auto; padding:20px; border-radius:8px; width:90%; max-width:600px; position:relative;">
+  <div class="modal-content" style="background:white; margin:5% auto; padding:20px; border-radius:8px; width:90%; max-width:800px; position:relative;">
     <span class="close" style="position:absolute; right:15px; top:10px; font-size:1.5rem; cursor:pointer;">&times;</span>
     <h4 class="mb-3">Car Price Predictor</h4>
     <form id="predictForm">
-      <div class="mb-3">
-        <label for="brand" class="form-label">Brand</label>
-        <select id="brand" class="form-select" required>
-          <option value="">Select Brand</option>
-          <option value="Datsun">Datsun</option>
-          <option value="Ford">Ford</option>
-          <option value="Honda">Honda</option>
-          <option value="Hyundai">Hyundai</option>
-          <option value="Jeep">Jeep</option>
-          <option value="KIA">KIA</option>
-          <option value="MG">MG</option>
-          <option value="Mahindra">Mahindra</option>
-          <option value="Maruti">Maruti</option>
-          <option value="Nissan">Nissan</option>
-          <option value="Renault">Renault</option>
-          <option value="Skoda">Skoda</option>
-          <option value="Tata">Tata</option>
-          <option value="Toyota">Toyota</option>
-          <option value="Volkswagen">Volkswagen</option>
-        </select>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="brand" class="form-label">Brand</label>
+            <select id="brand" class="form-select" required>
+              <option value="">Select Brand</option>
+              <option value="Datsun">Datsun</option>
+              <option value="Ford">Ford</option>
+              <option value="Honda">Honda</option>
+              <option value="Hyundai">Hyundai</option>
+              <option value="Jeep">Jeep</option>
+              <option value="KIA">KIA</option>
+              <option value="MG">MG</option>
+              <option value="Mahindra">Mahindra</option>
+              <option value="Maruti">Maruti</option>
+              <option value="Nissan">Nissan</option>
+              <option value="Renault">Renault</option>
+              <option value="Skoda">Skoda</option>
+              <option value="Tata">Tata</option>
+              <option value="Toyota">Toyota</option>
+              <option value="Volkswagen">Volkswagen</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="model" class="form-label">Model</label>
+            <select id="model" class="form-select" required>
+              <option value="">Select Model</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="year" class="form-label">Year of Manufacture</label>
+            <input type="number" id="year" class="form-control" placeholder="e.g. 2020" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="mileage" class="form-label">Mileage (KM)</label>
+            <input type="number" id="mileage" class="form-control" placeholder="e.g. 35000" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="spare_key" class="form-label">Spare Key Available?</label>
+            <select id="spare_key" class="form-select" required>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="engine_capacity" class="form-label">Engine Capacity (CC)</label>
+            <input type="number" id="engine_capacity" class="form-control" placeholder="e.g. 1199" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="transmission" class="form-label">Transmission</label>
+            <select id="transmission" class="form-select" required>
+              <option value="">Select</option>
+              <option value="Manual">Manual</option>
+              <option value="Automatic">Automatic</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="fuel_type" class="form-label">Fuel Type</label>
+            <select id="fuel_type" class="form-select" required>
+              <option value="">Select</option>
+              <option value="Petrol">Petrol</option>
+              <option value="Diesel">Diesel</option>
+              <option value="Electric">Electric</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="ownership" class="form-label">Ownership</label>
+            <select id="ownership" class="form-select" required>
+              <option value="">Select</option>
+              <option value="1st owner">1st owner</option>
+              <option value="2nd owner">2nd owner</option>
+              <option value="3rd owner">3rd owner</option>
+            </select>
+          </div>
+
+        </div> 
       </div>
 
-      <div class="mb-3">
-        <label for="model" class="form-label">Model</label>
-        <select id="model" class="form-select" required>
-          <option value="">Select Model</option>
-        </select>
-      </div>
+    <div class="text-center mt-3">
+        <button type="submit" class="btn btn-success">Predict</button>
+    </div>
 
-      <div class="mb-3">
-        <label for="year" class="form-label">Year</label>
-        <input type="number" id="year" class="form-control" placeholder="e.g. 2020" required>
-      </div>
-
-      <div class="mb-3">
-        <label for="mileage" class="form-label">Mileage (KM)</label>
-        <input type="number" id="mileage" class="form-control" placeholder="e.g. 35000" required>
-      </div>
-
-      <div class="mb-3">
-        <label for="engine_capacity" class="form-label">Engine Capacity (CC)</label>
-        <input type="number" id="engine_capacity" class="form-control" placeholder="e.g. 1199" required>
-      </div>
-
-      <div class="mb-3">
-        <label for="transmission" class="form-label">Transmission</label>
-        <select id="transmission" class="form-select" required>
-          <option value="">Select</option>
-          <option value="Manual">Manual</option>
-          <option value="Automatic">Automatic</option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label for="fuel_type" class="form-label">Fuel Type</label>
-        <select id="fuel_type" class="form-select" required>
-          <option value="">Select</option>
-          <option value="Petrol">Petrol</option>
-          <option value="Diesel">Diesel</option>
-          <option value="Electric">Electric</option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label for="ownership" class="form-label">Ownership</label>
-        <select id="ownership" class="form-select" required>
-          <option value="">Select</option>
-          <option value="1st owner">1st owner</option>
-          <option value="2nd owner">2nd owner</option>
-          <option value="3rd owner">3rd owner</option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label for="spare_key" class="form-label">Spare Key Available?</label>
-        <select id="spare_key" class="form-select" required>
-          <option value="1">Yes</option>
-          <option value="0">No</option>
-        </select>
-      </div>
-
-      <button type="submit" class="btn btn-success">Predict</button>
     </form>
 
     <div id="predictedPrice" class="mt-3 fw-bold text-success" style="font-size:1.2rem;"></div>
   </div>
 </div>
+
+
 <script src="{% static 'js/brand_models.js' %}"></script>
 
 <script>

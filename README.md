@@ -13,11 +13,11 @@ ResaleX is a full-stack web application for buying and selling pre-owned cars in
 - **Email Notifications** – Buyers can contact sellers directly via email.  
 - **Responsive Design** – Mobile-first UI built with Bootstrap 5.  
 <br>
-<img width="1852" height="983" alt="Screenshot 2025-07-14 193431" src="previews/Screenshot 2025-07-14 193431.png" /><br><br>
-<img width="1795" height="947" alt="Screenshot 2025-07-14 193809" src="previews/Screenshot 2025-07-14 193809.png" /><br><br>
-<img width="1857" height="992" alt="Screenshot 2025-07-14 193836" src="previews/Screenshot 2025-07-14 193836.png" /><br><br>
-<img width="1807" height="992" alt="image" src="previews/Screenshot 2025-07-14 200707.png" />
-
+<img width="1852" height="983" alt="Screenshot 2025-07-14 193431" src="previews/Main Page.png" /><br><br>
+<img width="1795" height="947" alt="Screenshot 2025-07-14 193809" src="previews/Login.png" /><br><br>
+<img width="1857" height="992" alt="Screenshot 2025-07-14 193836" src="previews/Home.png" /><br><br>
+<img width="1807" height="992" alt="image" src="previews/Listings.png" />
+<img width="1807" height="992" alt="image" src="previews/Model.png" />
 ---
 
 ## Tech Stack
