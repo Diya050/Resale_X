@@ -16,11 +16,11 @@ from decouple import config
 # from distutils.util import strtobool
 
 from django.contrib.messages import constants as messages
-import dj_database_url
+# import dj_database_url
 
-DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
-}
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+# }
 
 # Intialize Environ
 env = environ.Env()

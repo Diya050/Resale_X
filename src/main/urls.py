@@ -15,6 +15,7 @@ urlpatterns = [
     path('listing/<str:id>/inquire/',
          inquire_listing_using_email, name='inquire_listing'),
 ]
+
 urlpatterns += [
     path('predict-price/', predict_price, name='predict_price'),
     path('send-email/', inquire_listing_using_email, name='send_email'),

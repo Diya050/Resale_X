@@ -10,15 +10,17 @@ from .models import LikedListing, Listing
 from .forms import ListingForm
 from users.forms import LocationForm
 from .filters import ListingFilter
-import joblib
-import xgboost as xgb
 import numpy as np
 import json
 import os
+import joblib
+import xgboost as xgb
 from django.conf import settings
+from django.http import JsonResponse
+import traceback
 
 
-# Load preprocessing artifacts and model
+# Load artifacts once at the top (already done in your file)
 model_dir = os.path.join(settings.BASE_DIR, 'main', 'ml')
 xgb_model = xgb.Booster()
 xgb_model.load_model(os.path.join(model_dir, "best_xgb.model"))
@@ -33,33 +35,84 @@ def predict_price(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            brand = data['brand']
-            model = data['model']
-            year = int(data['year'])
-            mileage = float(data['mileage'])
 
-            # Preprocess inputs
-            brand_encoded = brand_te_mapping.get(brand, global_mean)
+            brand = data.get("brand")
+            model = data.get("model")
+            year = int(data.get("year"))
+            mileage = float(data.get("mileage"))
+            engine_capacity = float(data.get("engine_capacity"))
+            transmission = data.get("transmission")  # e.g., "Manual"
+            fuel_type = data.get("fuel_type")        # e.g., "Petrol"
+            ownership = data.get("ownership")        # e.g., "2nd owner"
+            spare_key = int(data.get("spare_key", 1))  # binary 0/1
+
+            # Base numerical features
+            age = 2025 - year
             model_encoded = model_te_mapping.get(model, global_mean)
-            age = 2025 - year  # Adjust year to age
-            input_data = [[brand_encoded, model_encoded, age, mileage]]
 
-            # Scale
-            input_scaled = scaler.transform(input_data)
+            # Start with base dict
+            input_dict = {
+                'engine_capacity(CC)': engine_capacity,
+                'km_driven': mileage,
+                'spare_key': spare_key,
+                'age': age,
+                'model_te': model_encoded,
+            }
 
-            # Create DMatrix for XGBoost
-            dmatrix = xgb.DMatrix(input_scaled, feature_names=onehot_columns)
+            # One-hot encoding: default to 0 for all known values
+            for col in onehot_columns:
+                if col not in input_dict:
+                    input_dict[col] = 0
 
-            # Predict
+            # Set the matching one-hot features to 1
+            brand_col = f"brand_{brand}"
+            if brand_col in input_dict:
+                input_dict[brand_col] = 1
+
+            transmission_col = f"transmission_{transmission}"
+            if transmission_col in input_dict:
+                input_dict[transmission_col] = 1
+
+            fuel_col = f"fuel_type_{fuel_type}"
+            if fuel_col in input_dict:
+                input_dict[fuel_col] = 1
+
+            ownership_col = f"ownership_{ownership}"
+            if ownership_col in input_dict:
+                input_dict[ownership_col] = 1
+
+            # Final input row
+            input_row = [input_dict[col] for col in onehot_columns]
+
+            # Scale if needed (based on training)
+            # Step 1: Create full input_dict (as you're doing).
+
+            # Step 2: Build input_row with all 25 features
+            input_row = [input_dict[col] for col in onehot_columns]  # full 25 features
+
+            # Step 3: Build a separate DataFrame for the 3 numeric features
+            num_cols = ['engine_capacity(CC)', 'km_driven', 'age']
+            numeric_vals = [[input_dict[col] for col in num_cols]]
+            scaled_numeric = scaler.transform(numeric_vals)[0]  # shape: (3,)
+
+            # Step 4: Replace unscaled numeric features in input_row with scaled ones
+            for idx, col in enumerate(onehot_columns):
+                if col in num_cols:
+                    input_row[idx] = scaled_numeric[num_cols.index(col)]
+
+            # Step 5: Predict using model
+            dmatrix = xgb.DMatrix([input_row], feature_names=onehot_columns)
             price = xgb_model.predict(dmatrix)[0]
-            price = round(price, 2)
 
-            return JsonResponse({"success": True, "price": price})
+
+            return JsonResponse({"success": True, "price": float(round(price, 2))})
+
         except Exception as e:
-            print("Prediction Error:", e)
+            import traceback
+            traceback.print_exc()
             return JsonResponse({"success": False, "error": str(e)})
-    return JsonResponse({"success": False, "error": "Invalid request"})
 
+    return JsonResponse({"success": False, "error": "Invalid request"})
 
 def main_view(request):
     return render(request, "views/main.html", {"name": "AutoMax"})

@@ -2,7 +2,16 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+
 {% block 'body' %}
+    {% comment %} <!-- Include Select2 CSS and JS via CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- ✅ First -->
+<!-- ✅ Select2 CSS and JS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> {% endcomment %}
+
+
+
 <div class="container-fluid text-center py-5">
     <div class="container px-4 py-5" id="hanging-icons">
         <div class="row g-4">
@@ -24,7 +33,7 @@
             </div>
             <button class="btn btn-lg btn-danger" type="submit">Save</button>
             <button type="button" id="predictPriceBtn" class="btn btn-lg btn-outline-primary ms-3">
-                💬 Predict Price
+                Predict Price
             </button>
         </form>
     </div>
@@ -32,7 +41,7 @@
 
 <!-- Price Prediction Modal -->
 <div id="predictModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1050;">
-  <div class="modal-content" style="background:white; margin:10% auto; padding:20px; border-radius:8px; width:90%; max-width:500px; position:relative;">
+  <div class="modal-content" style="background:white; margin:10% auto; padding:20px; border-radius:8px; width:90%; max-width:600px; position:relative;">
     <span class="close" style="position:absolute; right:15px; top:10px; font-size:1.5rem; cursor:pointer;">&times;</span>
     <h4 class="mb-3">Car Price Predictor</h4>
     <form id="predictForm">
@@ -40,49 +49,142 @@
         <label for="brand" class="form-label">Brand</label>
         <select id="brand" class="form-select" required>
           <option value="">Select Brand</option>
-          <option value="Maruti">Maruti</option>
-          <option value="Hyundai">Hyundai</option>
-          <option value="Honda">Honda</option>
-          <option value="Toyota">Toyota</option>
-          <!-- Add more brands from your dataset -->
+<option value="Datsun">Datsun</option>
+<option value="Ford">Ford</option>
+<option value="Honda">Honda</option>
+<option value="Hyundai">Hyundai</option>
+<option value="Jeep">Jeep</option>
+<option value="KIA">KIA</option>
+<option value="MG">MG</option>
+<option value="Mahindra">Mahindra</option>
+<option value="Maruti">Maruti</option>
+<option value="Nissan">Nissan</option>
+<option value="Renault">Renault</option>
+<option value="Skoda">Skoda</option>
+<option value="Tata">Tata</option>
+<option value="Toyota">Toyota</option>
+<option value="Volkswagen">Volkswagen</option>
+          <!-- Add more as needed -->
         </select>
       </div>
+
       <div class="mb-3">
         <label for="model" class="form-label">Model</label>
-        <input type="text" id="model" class="form-control" placeholder="Enter Model" required>
+        <select id="model" class="form-select" required>
+          <option value="">Select Model</option>
+        </select>
       </div>
+
       <div class="mb-3">
         <label for="year" class="form-label">Year</label>
         <input type="number" id="year" class="form-control" placeholder="e.g. 2020" required>
       </div>
+
       <div class="mb-3">
         <label for="mileage" class="form-label">Mileage (KM)</label>
         <input type="number" id="mileage" class="form-control" placeholder="e.g. 35000" required>
       </div>
+
+      <div class="mb-3">
+        <label for="engine_capacity" class="form-label">Engine Capacity (CC)</label>
+        <input type="number" id="engine_capacity" class="form-control" placeholder="e.g. 1199" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="transmission" class="form-label">Transmission</label>
+        <select id="transmission" class="form-select" required>
+          <option value="">Select</option>
+          <option value="Manual">Manual</option>
+          <option value="Automatic">Automatic</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="fuel_type" class="form-label">Fuel Type</label>
+        <select id="fuel_type" class="form-select" required>
+          <option value="">Select</option>
+          <option value="Petrol">Petrol</option>
+          <option value="Diesel">Diesel</option>
+          <option value="Electric">Electric</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="ownership" class="form-label">Ownership</label>
+        <select id="ownership" class="form-select" required>
+          <option value="">Select</option>
+          <option value="1st owner">1st owner</option>
+          <option value="2nd owner">2nd owner</option>
+          <option value="3rd owner">3rd owner</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="spare_key" class="form-label">Spare Key Available?</label>
+        <select id="spare_key" class="form-select" required>
+          <option value="1">Yes</option>
+          <option value="0">No</option>
+        </select>
+      </div>
+
       <button type="submit" class="btn btn-success">Predict</button>
     </form>
+
     <div id="predictedPrice" class="mt-3 fw-bold text-success" style="font-size:1.2rem;"></div>
   </div>
 </div>
+<script src="{% static 'js/brand_models.js' %}"></script>
 
 <script>
-// Open modal
+{% comment %} $(document).ready(function () {
+    $('#model').select2({
+        placeholder: 'Select a model',
+        width: '100%',
+
+    });
+}); {% endcomment %}
+
+
+
+// Modal open/close
 document.getElementById("predictPriceBtn").onclick = function() {
     document.getElementById("predictModal").style.display = "block";
 };
 
-// Close modal
 document.querySelector(".close").onclick = function() {
     document.getElementById("predictModal").style.display = "none";
 };
 
-// Handle prediction form submission
-document.getElementById("predictForm").onsubmit = function(e) {
+// Update models dropdown on brand change
+document.getElementById("brand").addEventListener("change", function () {
+    const brand = this.value;
+    const modelSelect = document.getElementById("model");
+    modelSelect.innerHTML = '<option value="">Select Model</option>';
+    if (brandModels[brand]) {
+        brandModels[brand].forEach(function (model) {
+            const option = document.createElement("option");
+            option.value = model;
+            option.textContent = model;
+            modelSelect.appendChild(option);
+        });
+    }
+});
+
+// Handle form submit
+document.getElementById("predictForm").onsubmit = function (e) {
     e.preventDefault();
-    const brand = document.getElementById("brand").value;
-    const model = document.getElementById("model").value;
-    const year = document.getElementById("year").value;
-    const mileage = document.getElementById("mileage").value;
+
+    const payload = {
+        brand: document.getElementById("brand").value,
+        model: document.getElementById("model").value,
+        year: document.getElementById("year").value,
+        mileage: document.getElementById("mileage").value,
+        engine_capacity: document.getElementById("engine_capacity").value,
+        transmission: document.getElementById("transmission").value,
+        fuel_type: document.getElementById("fuel_type").value,
+        ownership: document.getElementById("ownership").value,
+        spare_key: document.getElementById("spare_key").value
+    };
 
     fetch("{% url 'predict_price' %}", {
         method: "POST",
@@ -90,25 +192,22 @@ document.getElementById("predictForm").onsubmit = function(e) {
             "Content-Type": "application/json",
             "X-CSRFToken": "{{ csrf_token }}"
         },
-        body: JSON.stringify({
-            brand: brand,
-            model: model,
-            year: year,
-            mileage: mileage
-        })
+        body: JSON.stringify(payload)
     })
     .then(response => response.json())
     .then(data => {
+        const resultBox = document.getElementById("predictedPrice");
         if (data.success) {
-            document.getElementById("predictedPrice").innerText = "Estimated Price: ₹" + data.price.toLocaleString();
+            resultBox.innerText = "Estimated Price: ₹" + data.price.toLocaleString();
         } else {
-            document.getElementById("predictedPrice").innerText = "Error: " + data.error;
+            resultBox.innerText = "Error: " + data.error;
         }
     })
     .catch(error => {
-        console.error("Error:", error);
         document.getElementById("predictedPrice").innerText = "Something went wrong!";
+        console.error("Error:", error);
     });
 };
 </script>
+
 {% endblock %}
