@@ -1,1 +1,1 @@
-web: gunicorn resale_X.wsgi --log-file -
+web: gunicorn resale_x.wsgi --log-file -
