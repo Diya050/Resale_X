@@ -9,7 +9,7 @@ class Location(models.Model):
     address_1 = models.CharField(max_length=128, blank=True)
     address_2 = models.CharField(max_length=128, blank=True)
     city = models.CharField(max_length=64)
-    state = INStateField()
+    state = models.CharField(max_length=64)
     zip_code = models.CharField(
         max_length=6,
         validators=[
